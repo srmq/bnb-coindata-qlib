@@ -1,0 +1,6 @@
+coindata-1d/
+coindata-1m/
+qlibcsv-1d-norm/
+qlibcsv-1m-norm/
+.vscode/
+.venv/
