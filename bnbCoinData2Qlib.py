@@ -89,11 +89,11 @@ async def main():
                     # [10] - Taker buy quote asset volume
                     # [11] - Ignore
                     # qlib csv format should be like (for 1m data)...
-                    # symbol,date,open,high,low,close,volume
+                    # symbol,date,open,high,low,close,volume,vwap
                     # sz000001,2021-11-15 09:30:00,18.459999084472656,18.479999542236328,2029253.0,18.3799991607666,18.3799991607666
                     #
                     # and for 1d data...
-                    # symbol,date,volume,high,close,open,low,adjclose
+                    # symbol,date,volume,high,close,open,low,adjclose,vwap
                     # sz000301,2020-11-02,13827112,6.539999961853027,6.5,6.170000076293945,6.170000076293945,6.459374904632568
                     #
                     # whereas bnbFetchCoinData is like...
@@ -109,9 +109,10 @@ async def main():
                     # Volume/lotSizeMinQty -> volume
                     # High*lotSizeMinQty -> high
                     # Low*lotSizeMinQty -> low
+                    # Quote asset volume / Volume -> vwap
                     outputCSV1m = output1m / (symbol['symbol'] + '.csv')
                     with open( outputCSV1m, 'w', newline='') as outputCSVFile1m:
-                        fieldnames = ['symbol', 'date', 'open', 'close', 'high', 'low', 'volume']
+                        fieldnames = ['symbol', 'date', 'open', 'close', 'high', 'low', 'volume', 'vwap']
                         writer1m = csv.DictWriter(outputCSVFile1m, fieldnames=fieldnames)
                         writer1m.writeheader()
                         for row in csvReader1m:
@@ -122,14 +123,15 @@ async def main():
                                 'close' : float(row['Close'])*lotSizeMinQty,
                                 'high' : float(row['High'])*lotSizeMinQty,
                                 'low' : float(row['Low'])*lotSizeMinQty,
-                                'volume' : float(row['Volume'])/lotSizeMinQty
+                                'volume' : float(row['Volume'])/lotSizeMinQty,
+                                'vwap': float(row['Quote asset volume'])/(float(row['Volume'])+1.0e-12)
                                 })
                 # doing 1d data
                 with open(symbolCSV1d, newline='') as csvfile:
                     csvReader1d = csv.DictReader(csvfile, delimiter=',')
                     outputCSV1d = output1d / (symbol['symbol'] + '.csv')
                     with open( outputCSV1d, 'w', newline='') as outputCSVFile1d:
-                        fieldnames = ['symbol', 'date', 'open', 'close', 'high', 'low', 'volume']
+                        fieldnames = ['symbol', 'date', 'open', 'close', 'high', 'low', 'volume', 'vwap']
                         writer1d = csv.DictWriter(outputCSVFile1d, fieldnames=fieldnames)
                         writer1d.writeheader()
                         for row in csvReader1d:
@@ -140,7 +142,8 @@ async def main():
                                 'close' : float(row['Close'])*lotSizeMinQty,
                                 'high' : float(row['High'])*lotSizeMinQty,
                                 'low' : float(row['Low'])*lotSizeMinQty,
-                                'volume' : float(row['Volume'])/lotSizeMinQty
+                                'volume' : float(row['Volume'])/lotSizeMinQty,
+                                'vwap': float(row['Quote asset volume'])/(float(row['Volume'])+1.0e-12)
                                 })
 
 

@@ -51,7 +51,8 @@ async def main():
                         'low' : float(row['low'])*factor,
                         'volume' : float(row['volume'])/factor,
                         'change' : ('' if lastClose is None else (close/lastClose - 1.0)),
-                        'factor' : factor
+                        'factor' : factor,
+                        'vwap': row['vwap']
                         })
                     lastClose = close
 
