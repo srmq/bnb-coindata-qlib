@@ -30,7 +30,7 @@ async def main():
             csvReader = csv.DictReader(inputCSVFile, delimiter=',')
             outputCSVFilePath = outputDir / csvFilePath.name
             with open(outputCSVFilePath, 'w', newline='') as outputCSVFile:
-                outputFields = ['symbol', 'date', 'open', 'close', 'high', 'low', 'volume', 'change', 'factor']
+                outputFields = ['symbol', 'date', 'open', 'close', 'high', 'low', 'volume', 'change', 'factor', 'vwap']
                 writer1d = csv.DictWriter(outputCSVFile, fieldnames=outputFields)
                 writer1d.writeheader()
                 firstRow = True
