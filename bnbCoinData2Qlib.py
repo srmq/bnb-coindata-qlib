@@ -4,6 +4,7 @@ from pathlib import Path
 import csv
 import argparse
 import datetime
+import pytz
 
 async def main():
 
@@ -118,7 +119,7 @@ async def main():
                         for row in csvReader1m:
                             writer1m.writerow({
                                 'symbol': symbol['symbol'],
-                                'date': datetime.datetime.fromtimestamp(float(row['Open time'])/1000.0).strftime('%Y-%m-%d %H:%M:%S'),
+                                'date': datetime.datetime.fromtimestamp(float(row['Open time'])/1000.0, tz=pytz.utc).strftime('%Y-%m-%dT%H:%M:%SZ'),
                                 'open' :  float(row['Open'])*lotSizeMinQty,
                                 'close' : float(row['Close'])*lotSizeMinQty,
                                 'high' : float(row['High'])*lotSizeMinQty,
@@ -137,7 +138,7 @@ async def main():
                         for row in csvReader1d:
                             writer1d.writerow({
                                 'symbol': symbol['symbol'],
-                                'date': datetime.datetime.fromtimestamp(float(row['Open time'])/1000.0).strftime('%Y-%m-%d'),
+                                'date': datetime.datetime.fromtimestamp(float(row['Open time'])/1000.0, tz=pytz.utc).strftime('%Y-%m-%d'),
                                 'open' :  float(row['Open'])*lotSizeMinQty,
                                 'close' : float(row['Close'])*lotSizeMinQty,
                                 'high' : float(row['High'])*lotSizeMinQty,
